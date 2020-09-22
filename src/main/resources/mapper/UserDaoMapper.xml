@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.seczone.ssdlc.gateway.core.dao.UserDao">
+
+    <update id="updateUser" parameterType="cn.seczone.ssdlc.gateway.core.User">
+        update t_user set
+        <trim prefix="" suffix="" suffixOverrides=",">
+            <if test="firstName != null">
+                first_name=#{firstName,jdbcType=VARCHAR},
+            </if>
+            <if test="lastName != null">
+                last_name=#{lastName,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email=#{email,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status=#{status,jdbcType=INTEGER},
+            </if>
+            <if test="password != null">
+                password=#{password,jdbcType=VARCHAR},
+            </if>
+            <if test="groupUuid != null ">
+                group_id=(select id from t_group where group_uuid = #{groupUuid,jdbcType=VARCHAR}),
+            </if>
+            <if test="roleId != null and roleId !=0">
+                role_id=#{roleId,jdbcType=INTEGER}
+            </if>
+        </trim>
+        where user_uuid=#{userUuid}
+    </update>
+
+    <select id="checkEmailExist" parameterType="cn.seczone.ssdlc.gateway.core.User" resultType="cn.seczone.ssdlc.gateway.core.User">
+        select id ,user_uuid as userUuid, login_count loginCount from t_user where email=#{email}
+    </select>
+
+    <update id="updateUserByEmail" parameterType="cn.seczone.ssdlc.gateway.core.User">
+        update t_user set
+        <trim prefix="" suffix="" suffixOverrides=",">
+            <if test="loginCount != null">
+                login_count = #{loginCount},
+            </if>
+        </trim>
+        where email=#{email}
+    </update>
+
+</mapper>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.seczone.ssdlc.gateway.core.dao.UserRepository">
+
+<!--    <resultMap id="userAuthMsg" type="cn.seczone.ssdlc.gateway.login.entity.UserAuthMsg">-->
+<!--        <result column="email" property="email" javaType="java.lang.String" jdbcType="VARCHAR"/>-->
+<!--        <result column="password" property="password" javaType="java.lang.String" jdbcType="VARCHAR"/>-->
+
+<!--        <result column="id" property="id" javaType="java.lang.Long" jdbcType="BIGINT"/>-->
+<!--        <result column="user_uuid" property="userUuid" javaType="java.lang.String" jdbcType="VARCHAR"/>-->
+<!--        <result column="first_name" property="firstName" javaType="java.lang.String" jdbcType="VARCHAR"/>-->
+<!--        <result column="last_name" property="lastName" javaType="java.lang.String" jdbcType="VARCHAR"/>-->
+<!--        <result column="status" property="status" javaType="java.lang.Integer" jdbcType="TINYINT"/>-->
+<!--        <result column="avatar_path" property="avatarPath" javaType="java.lang.String" jdbcType="VARCHAR"/>-->
+<!--        <result column="role_id" property="roleId" javaType="java.lang.Integer" jdbcType="INTEGER"/>-->
+<!--        <result column="role_code" property="roleCode" javaType="java.lang.String" jdbcType="VARCHAR"/>-->
+<!--        <result column="group_id" property="groupId" javaType="java.lang.Integer" jdbcType="INTEGER"/>-->
+<!--        <result column="org_id" property="orgId" javaType="java.lang.Integer" jdbcType="INTEGER"/>-->
+<!--        <result column="group_uuid" property="groupUuid" javaType="java.lang.String" jdbcType="VARCHAR"/>-->
+<!--        <result column="group_name" property="groupName" javaType="java.lang.String" jdbcType="VARCHAR"/>-->
+<!--        <result column="org_uuid" property="orgUuid" javaType="java.lang.String" jdbcType="VARCHAR"/>-->
+<!--        <result column="login_count" property="loginCount" javaType="java.lang.Integer" jdbcType="INTEGER"/>-->
+<!--    </resultMap>-->
+
+<!--    <select id="getUserAuthMsgByEmail" parameterType="java.lang.String" resultMap="userAuthMsg">-->
+<!--        SELECT u.email, u.`password`, u.id, u.user_uuid, u.first_name, u.last_name, u.`status`, u.avatar_path,-->
+<!--          u.role_id, r.role_code, u.group_id, g.group_uuid,g.group_name, u.org_id, o.org_uuid, u.login_count-->
+<!--        FROM t_user u-->
+<!--        left join t_orgnizaition o on u.org_id = o.id-->
+<!--        join t_role r  on u.role_id = r.id-->
+<!--        left join t_group g on  u.group_id = g.id-->
+<!--        WHERE u.email = #{email};-->
+<!--    </select>-->
+
+<!--    <select id="getAllUserAuthMsg" parameterType="java.lang.String" resultMap="userAuthMsg">-->
+<!--        SELECT u.email, u.`password`, u.id, u.user_uuid, u.first_name, u.last_name, u.`status`, u.avatar_path,-->
+<!--          u.role_id, r.role_code, u.group_id, g.group_uuid,g.group_name, u.org_id, o.org_uuid-->
+<!--        FROM t_user u-->
+<!--        join t_orgnizaition o on u.org_id = o.id-->
+<!--        join t_role r  on u.role_id = r.id-->
+<!--        left join t_group g on  u.group_id = g.id-->
+<!--    </select>-->
+
+<!--    <select id="getGroupByOrgId" parameterType="java.lang.Long" resultType="cn.seczone.ssdlc.gateway.login.Group">-->
+<!--        SELECT g.group_uuid groupUuid from t_group g-->
+<!--        WHERE g.org_id = #{0};-->
+<!--    </select>-->
+
+    <resultMap id="userAuthMsg" type="cn.seczone.ssdlc.gateway.core.entity.UserAuthMsg">
+        <result column="email" property="email" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="password" property="password" javaType="java.lang.String" jdbcType="VARCHAR"/>
+
+        <result column="id" property="id" javaType="java.lang.Long" jdbcType="BIGINT"/>
+        <result column="user_uuid" property="userUuid" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="first_name" property="firstName" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="last_name" property="lastName" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="status" property="status" javaType="java.lang.Integer" jdbcType="TINYINT"/>
+        <result column="avatar_path" property="avatarPath" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="role_id" property="roleId" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result column="role_code" property="roleCode" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="group_id" property="groupId" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result column="org_id" property="orgId" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result column="group_uuid" property="groupUuid" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="group_name" property="groupName" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="org_uuid" property="orgUuid" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="login_count" property="loginCount" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="findUserByEmail" resultMap="userAuthMsg">
+        SELECT u.email, u.`password`, u.id, u.user_uuid, u.first_name, u.last_name, u.`status`, u.avatar_path,
+               u.role_id, r.role_code, u.group_id, g.group_uuid,g.group_name, u.org_id, o.org_uuid, u.login_count
+        FROM t_user u
+                 left join t_orgnizaition o on u.org_id = o.id
+                 join t_role r  on u.role_id = r.id
+                 left join t_group g on  u.group_id = g.id
+        WHERE u.email = #{username}
+        <if test="email != null and email != ''">
+            AND u.email = #{email};
+        </if>
+    </select>
+
+    <select id="getGroupByOrgId" parameterType="java.lang.Long" resultType="cn.seczone.ssdlc.gateway.core.entity.Group">
+        SELECT group_uuid groupUuid ,id ,org_id orgId from t_group where org_id = #{0};
+    </select>
+
+    <select id="findByEmailAndPassword" resultType="cn.seczone.ssdlc.gateway.core.entity.SUser">
+
+    </select>
+
+    <select id="login" resultType="cn.seczone.ssdlc.gateway.core.entity.SUser">
+
+    </select>
+
+</mapper>
